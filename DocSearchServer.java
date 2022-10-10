@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
@@ -7,12 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 class FileHelpers {
-    static List<Path> getFiles(Path start) throws IOException {
-        List<Path> paths = Files.walk(start).filter(p -> !Files.isDirectory(p)).toList();
-        return paths;
+    static List<File> getFiles(Path start) throws IOException {
+        File f = start.toFile();
+        List<File> result = new ArrayList<>();
+        result.add(start.toFile());
+        if(f.isDirectory()) {
+            File[] paths = f.listFiles();
+            for(File subFile: paths) {
+                result.addAll(getFiles(subFile.toPath()));
+            }
+        }
+        return result;
     }
-    static String readFile(Path p) throws IOException {
-        return new String(Files.readAllBytes(p));
+    static String readFile(File f) throws IOException {
+        return new String(Files.readAllBytes(f.toPath()));
     }
 }
 
@@ -24,7 +33,7 @@ class Handler implements URLHandler {
 
     public String handleRequest(URI url) throws IOException {
         long start = System.currentTimeMillis();
-        List<Path> paths = FileHelpers.getFiles(Paths.get("./technical"));
+        List<File> paths = FileHelpers.getFiles(Paths.get("./technical"));
         if (url.getPath().equals("/")) {
             return String.format("There are %d total files to search.", paths.size());
         } else if (url.getPath().equals("/search")) {
@@ -32,9 +41,9 @@ class Handler implements URLHandler {
             if (parameters[0].equals("q")) {
                 String result = "";
                 List<String> foundPaths = new ArrayList<>();
-                for(Path p: paths) {
-                    if(Files.readString(p).contains(parameters[1])) {
-                        foundPaths.add(p.toString());
+                for(File f: paths) {
+                    if(FileHelpers.readFile(f).contains(parameters[1])) {
+                        foundPaths.add(f.toString());
                     }
                 }
                 result = String.join("\n", foundPaths);
