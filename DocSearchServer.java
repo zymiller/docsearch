@@ -26,11 +26,6 @@ class FileHelpers {
 }
 
 class Handler implements URLHandler {
-
-    // The one bit of state on the server: a number that will be manipulated by
-    // various requests.
-    int num = 0;
-
     public String handleRequest(URI url) throws IOException {
         long start = System.currentTimeMillis();
         List<File> paths = FileHelpers.getFiles(Paths.get("./technical"));
