@@ -13,7 +13,6 @@ class FileHelpers {
         File f = start.toFile();
         List<File> result = new ArrayList<>();
         if(f.isDirectory()) {
-            System.out.println("It's a folder");
             File[] paths = f.listFiles();
             for(File subFile: paths) {
                 result.addAll(getFiles(subFile.toPath()));
@@ -25,7 +24,6 @@ class FileHelpers {
         return result;
     }
     static String readFile(File f) throws IOException {
-        System.out.println(f.toString());
         return new String(Files.readAllBytes(f.toPath()));
     }
 }
