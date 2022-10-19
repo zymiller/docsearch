@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,47 +12,27 @@ class FileHelpers {
     static List<File> getFiles(Path start) throws IOException {
         File f = start.toFile();
         List<File> result = new ArrayList<>();
-        result.add(start.toFile());
         if(f.isDirectory()) {
+            System.out.println("It's a folder");
             File[] paths = f.listFiles();
             for(File subFile: paths) {
                 result.addAll(getFiles(subFile.toPath()));
             }
         }
+        else {
+            result.add(start.toFile());
+        }
         return result;
     }
     static String readFile(File f) throws IOException {
+        System.out.println(f.toString());
         return new String(Files.readAllBytes(f.toPath()));
     }
 }
 
 class Handler implements URLHandler {
     public String handleRequest(URI url) throws IOException {
-        long start = System.currentTimeMillis();
-        List<File> paths = FileHelpers.getFiles(Paths.get("./technical"));
-        if (url.getPath().equals("/")) {
-            return String.format("There are %d total files to search.", paths.size());
-        } else if (url.getPath().equals("/search")) {
-            String[] parameters = url.getQuery().split("=");
-            if (parameters[0].equals("q")) {
-                String result = "";
-                List<String> foundPaths = new ArrayList<>();
-                for(File f: paths) {
-                    if(FileHelpers.readFile(f).contains(parameters[1])) {
-                        foundPaths.add(f.toString());
-                    }
-                }
-                result = String.join("\n", foundPaths);
-                System.out.println(System.currentTimeMillis() - start);
-                return String.format("Found %d paths:\n%s", foundPaths.size(), result);
-            }
-            else {
-                return "Couldn't find query parameter q";
-            }
-        }
-        else {
-            return "Don't know how to handle that path!";
-        }
+      return "Don't know how to handle that path!";
     }
 }
 
@@ -66,4 +47,14 @@ class DocSearchServer {
 
         Server.start(port, new Handler());
     }
+}
+
+class DocSearchTest {
+  public static void main(String[] args) throws IOException, URISyntaxException {
+    System.out.println("The paths are: " + FileHelpers.getFiles(Paths.get("./technical")).toString());
+
+    Handler h = new Handler();
+    URI uri = new URI("http://localhost:4001/search?q=taxes");
+    System.out.println(h.handleRequest(uri));
+  }
 }
