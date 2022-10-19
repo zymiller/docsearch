@@ -31,6 +31,10 @@ class FileHelpers {
 }
 
 class Handler implements URLHandler {
+    List<File> files;
+    Handler(String directory) throws IOException {
+      this.files = FileHelpers.getFiles(Paths.get(directory));
+    }
     public String handleRequest(URI url) throws IOException {
       return "Don't know how to handle that path!";
     }
@@ -45,16 +49,7 @@ class DocSearchServer {
 
         int port = Integer.parseInt(args[0]);
 
-        Server.start(port, new Handler());
+        Server.start(port, new Handler("./technical/"));
     }
 }
 
-class DocSearchTest {
-  public static void main(String[] args) throws IOException, URISyntaxException {
-    System.out.println("The paths are: " + FileHelpers.getFiles(Paths.get("./technical")).toString());
-
-    Handler h = new Handler();
-    URI uri = new URI("http://localhost:4001/search?q=taxes");
-    System.out.println(h.handleRequest(uri));
-  }
-}
