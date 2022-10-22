@@ -9,13 +9,13 @@ public class TestDocSearch {
 	public void testIndex() throws URISyntaxException, IOException {
     Handler h = new Handler("./technical/");
     URI rootPath = new URI("http://localhost/");
-    assertEquals("There are 1391 total files to search.", h.handleRequest(rootPath));
+    assertEquals("There are 10 total files to search.", h.handleRequest(rootPath));
 	}
 	@Test 
 	public void testSearch() throws URISyntaxException, IOException {
     Handler h = new Handler("./technical/");
     URI rootPath = new URI("http://localhost/search?q=taxation");
-    String expect = "Found 3 paths:\n./technical/government/Gen_Account_Office/d01591sp.txt\n./technical/plos/journal.pbio.0020052.txt";
+    String expect = "Found 3 paths:\n./technical/government/Gen_Account_Office/d01591sp.txt\n./technical/plos/journal.pbio.0020052.txt\n./technical/biomed/1471-2296-3-3.txt";
     assertEquals(expect, h.handleRequest(rootPath));
 	}
 }
