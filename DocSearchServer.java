@@ -34,7 +34,6 @@ class Handler implements URLHandler {
       this.files = FileHelpers.getFiles(Paths.get(directory));
     }
     public String handleRequest(URI url) throws IOException {
-       long start = System.currentTimeMillis();
        List<File> paths = FileHelpers.getFiles(Paths.get("./technical"));
        if (url.getPath().equals("/")) {
            return String.format("There are %d total files to search.", paths.size());
@@ -49,7 +48,6 @@ class Handler implements URLHandler {
                    }
                }
                result = String.join("\n", foundPaths);
-               System.out.println(System.currentTimeMillis() - start);
                return String.format("Found %d paths:\n%s", foundPaths.size(), result);
            }
            else {
