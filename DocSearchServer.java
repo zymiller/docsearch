@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 class FileHelpers {
     static List<File> getFiles(Path start) throws IOException {
@@ -47,6 +48,7 @@ class Handler implements URLHandler {
                        foundPaths.add(f.toString());
                    }
                }
+               Collections.sort(foundPaths);
                result = String.join("\n", foundPaths);
                return String.format("Found %d paths:\n%s", foundPaths.size(), result);
            }

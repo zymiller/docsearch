@@ -15,7 +15,7 @@ public class TestDocSearch {
 	public void testSearch() throws URISyntaxException, IOException {
     Handler h = new Handler("./technical/");
     URI rootPath = new URI("http://localhost/search?q=taxation");
-    String expect = "Found 3 paths:\n./technical/government/Gen_Account_Office/d01591sp.txt\n./technical/plos/journal.pbio.0020052.txt\n./technical/biomed/1471-2296-3-3.txt";
+    String expect = "Found 3 paths:\n./technical/biomed/1471-2296-3-3.txt\n./technical/government/Gen_Account_Office/d01591sp.txt\n./technical/plos/journal.pbio.0020052.txt";
     assertEquals(expect, h.handleRequest(rootPath));
 	}
 }
