@@ -71,7 +71,7 @@ class DocSearchServer {
 
         int port = Integer.parseInt(args[0]);
 
-        Server.start(port, new Handler("./written_2/"));
+        Server.start(port, new Handler(args[1]));
     }
 }
 
